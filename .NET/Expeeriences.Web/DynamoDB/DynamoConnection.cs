@@ -12,8 +12,8 @@ namespace DynamoDB
     {
         private IAmazonDynamoDB _dynamoDb;
         private const string TableName = "TestTable";
-        private const string AccessKey = "AKIAIIUVKT6TXYWRUEXA";
-        private const string SecretKey = "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";
+        private const string AccessKey = "test";
+        private const string SecretKey = "test";
 
         public DynamoConnection(IAmazonDynamoDB dynamoDb)
         {
