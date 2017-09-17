@@ -1,47 +1,61 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using Amazon.Runtime;
 
 namespace DynamoDB
 {
     public class DynamoConnection
     {
-        private IAmazonDynamoDB _dynamoDb;
+        private readonly IAmazonDynamoDB _dynamoDb;
         private const string TableName = "TestTable";
-        private const string AccessKey = "test";
-        private const string SecretKey = "test";
 
         public DynamoConnection(IAmazonDynamoDB dynamoDb)
         {
             _dynamoDb = dynamoDb;
-
-            _dynamoDb.CreateTableAsync(new CreateTableRequest(TableName, new List<KeySchemaElement>
-            {
-                new KeySchemaElement { AttributeName = "Row1" },
-                new KeySchemaElement { AttributeName = "Row2" }
-            }));
         }
 
-        public void StartDynamo()
+        public void CreateTable()
         {
-            var dynamoCredentials = new BasicAWSCredentials(AccessKey, SecretKey);
-            var dynamoConfig = new AmazonDynamoDBConfig { RegionEndpoint = RegionEndpoint.USEast1};
-
-            AmazonDynamoDBClient dynamoClient;
             try
             {
-                dynamoClient = new AmazonDynamoDBClient(dynamoCredentials, dynamoConfig);
+                _dynamoDb.CreateTableAsync(new CreateTableRequest(TableName, new List<KeySchemaElement>
+                {
+                    new KeySchemaElement {AttributeName = "Row1"},
+                    new KeySchemaElement {AttributeName = "Row2"}
+                }));
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Error: " + e.Message);
-                PauseForDebugWindow();
+                Debug.WriteLine("Error: ", e);
             }
+        }
 
+        public List<string> GetTableNames()
+        {
+            try
+            {
+                return _dynamoDb.ListTablesAsync().Result.TableNames;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: ", e);
+                return new List<string>();
+            }
+        }
+
+        public void AddItem(Dictionary<string, AttributeValue> items)
+        {
+            try
+            {
+                _dynamoDb.PutItemAsync(TableName, items);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: ", e);
+            }
         }
 
         public static void PauseForDebugWindow()
