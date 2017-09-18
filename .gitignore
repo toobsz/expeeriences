@@ -303,3 +303,5 @@ OpenCover/
 
 # Node
 /node_modules
+
+/.aws
