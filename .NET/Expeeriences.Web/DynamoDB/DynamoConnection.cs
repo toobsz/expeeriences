@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 
@@ -37,7 +38,9 @@ namespace DynamoDB
         {
             try
             {
-                return _dynamoDb.ListTablesAsync().Result.TableNames;
+                var test = _dynamoDb.ListTablesAsync();
+
+                return test.Result.TableNames;
             }
             catch (Exception e)
             {
@@ -50,7 +53,12 @@ namespace DynamoDB
         {
             try
             {
-                _dynamoDb.PutItemAsync(TableName, items);
+                //var testMany = _dynamoDb.BatchWriteItemAsync("test", )
+                var test = _dynamoDb.PutItemAsync("test", items);
+
+                var test1 = test.Result.ItemCollectionMetrics;
+                var test2 = test.Result.Attributes;
+                var test3 = test.Result;
             }
             catch (Exception e)
             {

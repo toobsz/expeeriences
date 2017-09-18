@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime.Internal;
 using DynamoDB;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +15,15 @@ namespace Expeeriences_Web.Controllers
         {
             var dynamoConnection = new DynamoConnection(dynamoDb);
             //dynamoConnection.CreateTable();
-            //dynamoConnection.GetTableNames();
+            //var test = dynamoConnection.GetTableNames();
 
-            //Dictionary<string, AttributeValue> items = new Dictionary<string, AttributeValue>();
-            //items.Add("Row1", new AttributeValue(new List<string>{ "item1", "item2", "item3" }));
-            //dynamoConnection.AddItem(items);
+            Dictionary<string, AttributeValue> items = new Dictionary<string, AttributeValue>();
+            //items["row1"] = new AttributeValue(ss: new List<string> { "item4", "item2", "item3" });
+            items["row1"] = new AttributeValue { S = "item4" };
+            dynamoConnection.AddItem(items);
         }
+
+
 
         public IActionResult Index()
         {
