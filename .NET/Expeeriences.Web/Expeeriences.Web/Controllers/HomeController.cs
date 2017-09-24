@@ -29,7 +29,6 @@ namespace Expeeriences_Web.Controllers
                 client.BaseAddress = new Uri("http://localhost:50771");
                 HttpResponseMessage response = client.GetAsync("/api/values/5").Result;
                 string stringData = response.Content.ReadAsStringAsync().Result;
-                ViewBag.HelloWorld = stringData;
             }
         }
 
