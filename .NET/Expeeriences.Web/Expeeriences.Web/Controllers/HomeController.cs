@@ -6,6 +6,7 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime.Internal;
 using DynamoDB;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace Expeeriences_Web.Controllers
 {
@@ -21,6 +22,15 @@ namespace Expeeriences_Web.Controllers
             //items["row1"] = new AttributeValue(ss: new List<string> { "item4", "item2", "item3" });
             items["row1"] = new AttributeValue { S = "item4" };
             dynamoConnection.AddItem(items);
+
+            using (HttpClient client = new HttpClient())
+            {
+                //local iis express port;
+                client.BaseAddress = new Uri("http://localhost:50771");
+                HttpResponseMessage response = client.GetAsync("/api/values/5").Result;
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                ViewBag.HelloWorld = stringData;
+            }
         }
 
 
